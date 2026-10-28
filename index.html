@@ -773,6 +773,11 @@
     </div>
 
     <script>
+    <script>
+        // --- НАСТРОЙКИ API ---
+        // Твой адрес сервера из Cloudflare
+        const API_URL = "https://healapi.lukasuka501.workers.dev";
+
         // --- НАВИГАЦИЯ ---
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => {
@@ -824,11 +829,54 @@
             }
         }
 
-        function submitAuth() {
-            authModal.classList.remove('active');
-            loginBtn.style.display = 'none';
-            profileBtn.style.display = 'block';
-            showPage('profile');
+        // ОТПРАВКА ДАННЫХ НА СЕРВЕР CLOUDFLARE
+        async function submitAuth() {
+            // Находим поля ввода (первое - логин, второе - пароль)
+            const inputs = authModal.querySelectorAll('.auth-input');
+            const username = inputs[0].value.trim();
+            const password = inputs[1].value.trim();
+
+            if (!username || !password) {
+                alert("Пожалуйста, заполните логин и пароль!");
+                return;
+            }
+
+            const endpoint = isRegisterMode ? "/register" : "/login";
+            
+            try {
+                const response = await fetch(API_URL + endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Успех!
+                    alert(data.message);
+                    if (!isRegisterMode && data.token) {
+                        // Сохраняем токен в браузере, чтобы не вводить пароль каждый раз
+                        localStorage.setItem('heal_token', data.token);
+                        localStorage.setItem('heal_user', username);
+                        
+                        // Меняем кнопки и открываем профиль
+                        authModal.classList.remove('active');
+                        loginBtn.style.display = 'none';
+                        profileBtn.style.display = 'block';
+                        showPage('profile');
+                        
+                        // Обновляем никнейм в профиле
+                        document.querySelector('#tab-settings .form-input').value = username;
+                    }
+                } else {
+                    // Ошибка от сервера (неверный пароль или логин занят)
+                    alert(data.error || "Произошла ошибка");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Сервер не отвечает. Проверьте интернет.");
+            }
         }
 
         // --- ПРОФИЛЬ ---
