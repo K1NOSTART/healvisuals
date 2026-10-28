@@ -13,7 +13,7 @@
             --bg-hover: #27272a;
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
-            --accent: #ff0000; /* Сделал красный цвет */
+            --accent: #ff0000; /* Красный цвет */
             --accent-hover: #cc0000;
             --border: #27272a;
         }
@@ -55,10 +55,6 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
         }
         @keyframes spinCube {
             0% { transform: rotateX(0deg) rotateY(0deg); }
@@ -148,6 +144,7 @@
         .hero h1 { font-size: 56px; line-height: 1.1; font-weight: 800; margin-bottom: 20px; }
         .hero h1 span { color: var(--accent); }
         .hero p { color: var(--text-muted); font-size: 18px; margin-bottom: 40px; }
+        .btn-lg { padding: 14px 32px; font-size: 16px; }
         
         /* 3D Куб */
         .hero-visual { perspective: 1000px; width: 400px; height: 400px; display: flex; justify-content: center; align-items: center; }
@@ -164,7 +161,7 @@
         .top    { transform: rotateX(90deg) translateZ(100px); }
         .bottom { transform: rotateX(-90deg) translateZ(100px); }
 
-        /* ================= СТРАНИЦА АВТОРИЗАЦИИ (Сплит-экран) ================= */
+        /* ================= СТРАНИЦА АВТОРИЗАЦИИ ================= */
         #page-auth {
             padding-top: 0;
             display: none;
@@ -175,7 +172,7 @@
 
         .auth-left {
             flex: 1;
-            background-image: url('https://i.imgur.com/your-image-url-here.jpg'); /* ТУТ ССЫЛКА НА 1 ФОТКУ */
+            background-image: url('https://i.imgur.com/your-image-url-here.jpg'); /* ТУТ ССЫЛКА НА ФОН */
             background-size: cover;
             background-position: center;
             position: relative;
@@ -245,6 +242,14 @@
         .settings-form { display: flex; flex-direction: column; gap: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 8px; }
         .form-group label { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+        
+        /* Стиль для заблокированного поля логина */
+        .form-input[readonly] {
+            background-color: #121215;
+            color: #666;
+            cursor: not-allowed;
+            border-color: #27272a;
+        }
 
         /* Вкладка Скачать клиент */
         .download-tab { text-align: center; }
@@ -252,16 +257,6 @@
             width: 100%; max-width: 700px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 30px;
         }
 
-        /* ================= FAQ И ТАРИФЫ (Стили остались прежними) ================= */
-        .section { padding: 80px 10%; text-align: center; }
-        .section-title { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
-        
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .price-card {
-            background: var(--bg-card); border: 1px solid var(--border); padding: 40px 30px; border-radius: 16px; text-align: center; transition: all 0.3s;
-        }
-        .price-card.popular { border-color: var(--accent); transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 0, 0, 0.15); }
-        
         /* Адаптив */
         @media (max-width: 900px) {
             nav ul { display: none; }
@@ -331,7 +326,7 @@
 
     <!-- АВТОРИЗАЦИЯ (Сплит-экран) -->
     <div id="page-auth" class="page">
-        <!-- Левая часть с картинкой (замени URL на нужную картинку) -->
+        <!-- Левая часть с картинкой (замени URL на нужную картинку из твоего 1 скрина) -->
         <div class="auth-left" style="background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg');"></div>
         
         <!-- Правая часть с формой -->
@@ -350,8 +345,8 @@
             <p class="auth-subtitle" id="authSubtitle">Создайте аккаунт, чтобы получить доступ к инструментам и настройкам</p>
 
             <form class="auth-form" onsubmit="event.preventDefault(); submitAuth();">
-                <label class="form-label">Введите Email или Логин</label>
-                <input type="text" class="form-input" id="authLogin" placeholder="user@example.com" required>
+                <label class="form-label">Введите Логин</label>
+                <input type="text" class="form-input" id="authLogin" placeholder="Ваш никнейм" required>
                 
                 <label class="form-label">Введите пароль</label>
                 <input type="password" class="form-input" id="authPass" placeholder="••••••••" required>
@@ -390,15 +385,16 @@
                         <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
                     </div>
                     <div class="settings-form">
-                        <div class="form-group"><label>Ваш никнейм</label><input type="text" class="form-input" id="profileNickname" value="HealUser" readonly></div>
-                        <div class="form-group"><label>Привязанная почта</label><input type="email" class="form-input" value="user@example.com"></div>
+                        <!-- ТУТ ПОЛЕ ЛОГИНА ЗАБЛОКИРОВАНО (readonly) -->
+                        <div class="form-group"><label>Ваш логин (изменить нельзя)</label><input type="text" class="form-input" id="profileNickname" value="Загрузка..." readonly></div>
+                        <div class="form-group"><label>Привязанная почта</label><input type="email" class="form-input" placeholder="Почта не привязана"></div>
                         <div class="form-group"><label>Смена пароля</label><input type="password" class="form-input" placeholder="Введите новый пароль"></div>
-                        <button class="btn-primary" style="align-self: flex-start; padding: 12px 30px; margin-top: 10px;">Обновить данные</button>
+                        <button class="btn-primary" style="align-self: flex-start; padding: 12px 30px; margin-top: 10px;">Сохранить изменения</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Вкладка: Скачать клиент (Твоя картинка) -->
+            <!-- Вкладка: Скачать клиент -->
             <div class="profile-content" id="tab-download" style="display: none;">
                 <div class="download-tab">
                     <!-- Вставь сюда ссылку на свою картинку из 1 скрина -->
@@ -436,11 +432,13 @@
             document.getElementById('page-' + pageId).classList.add('active');
             window.scrollTo(0, 0);
             
-            // Скрываем шапку на странице авторизации
-            if (pageId === 'auth') {
-                document.getElementById('mainHeader').style.display = 'none';
-            } else {
-                document.getElementById('mainHeader').style.display = 'flex';
+            const header = document.getElementById('mainHeader');
+            if (header) {
+                if (pageId === 'auth') {
+                    header.style.display = 'none';
+                } else {
+                    header.style.display = 'flex';
+                }
             }
         }
 
@@ -474,6 +472,11 @@
             const username = document.getElementById('authLogin').value.trim();
             const password = document.getElementById('authPass').value.trim();
             
+            if (!username || !password) {
+                alert("Заполните логин и пароль!");
+                return;
+            }
+
             if (isRegisterMode) {
                 const confirmPass = document.getElementById('authPassConfirm').value.trim();
                 if (password !== confirmPass) {
@@ -483,7 +486,9 @@
             }
 
             const endpoint = isRegisterMode ? "/register" : "/login";
-            
+            const submitBtn = document.getElementById('submitAuthBtn');
+            submitBtn.innerText = "Загрузка...";
+
             try {
                 const response = await fetch(API_URL + endpoint, {
                     method: "POST",
@@ -495,33 +500,49 @@
 
                 if (response.ok) {
                     alert(data.message);
+                    
                     if (!isRegisterMode && data.token) {
-                        // Сохраняем токен и ник
                         localStorage.setItem('heal_token', data.token);
                         localStorage.setItem('heal_user', username);
                         
-                        // Показываем кнопку профиля
                         document.getElementById('loginBtn').style.display = 'none';
                         document.getElementById('profileBtn').style.display = 'block';
-                        document.getElementById('profileNickname').value = username;
+                        
+                        // Устанавливаем логин в профиле
+                        const nickInput = document.getElementById('profileNickname');
+                        if(nickInput) nickInput.value = username;
                         
                         showPage('profile');
+                    } else if (isRegisterMode) {
+                        toggleAuthMode();
+                        alert("Теперь вы можете войти!");
                     }
                 } else {
                     alert(data.error || "Ошибка");
                 }
             } catch (error) {
-                alert("Сервер не отвечает.");
+                console.error(error);
+                alert("Сервер не отвечает. Проверьте интернет.");
+            } finally {
+                if (isRegisterMode) {
+                    submitBtn.innerText = "Создать аккаунт";
+                } else {
+                    submitBtn.innerText = "Войти";
+                }
             }
         }
 
-        // Проверка при загрузке (если токен есть в памяти)
+        // Проверка при загрузке
         window.onload = () => {
             const token = localStorage.getItem('heal_token');
-            if (token) {
+            const user = localStorage.getItem('heal_user');
+            
+            if (token && user) {
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('profileBtn').style.display = 'block';
-                document.getElementById('profileNickname').value = localStorage.getItem('heal_user');
+                
+                const nickInput = document.getElementById('profileNickname');
+                if(nickInput) nickInput.value = user;
             }
         };
 
@@ -537,6 +558,7 @@
             document.getElementById('tab-' + tabName).style.display = 'block';
         }
 
+        // --- АВАТАРКА ---
         function previewImage(event) {
             const reader = new FileReader();
             reader.onload = function() {
