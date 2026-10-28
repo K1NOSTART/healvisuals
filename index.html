@@ -110,6 +110,10 @@
 
         .header-right { display: flex; align-items: center; gap: 20px; }
         
+        .socials { display: flex; gap: 12px; align-items: center; margin-right: 10px; }
+        .social-icon { width: 18px; height: 18px; fill: var(--text-muted); cursor: pointer; transition: fill 0.3s; }
+        .social-icon:hover { fill: var(--text-main); }
+
         .btn-outline, .btn-primary {
             border-radius: 50px;
             padding: 8px 20px;
@@ -118,18 +122,10 @@
             transition: all 0.3s;
         }
 
-        .btn-outline {
-            background: transparent; color: var(--text-main); border: 1px solid var(--border);
-        }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
         .btn-outline:hover { background: var(--bg-card); }
-
-        .btn-primary {
-            background-color: var(--accent); color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-hover); transform: translateY(-2px);
-        }
+        .btn-primary { background-color: var(--accent); color: #fff; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
 
         /* ================= СТРАНИЦЫ ================= */
         .page { display: none; min-height: 100vh; padding-top: 100px; animation: fadeIn 0.4s ease-out; }
@@ -161,30 +157,69 @@
         .top    { transform: rotateX(90deg) translateZ(100px); }
         .bottom { transform: rotateX(-90deg) translateZ(100px); }
 
-        /* ================= СТРАНИЦА АВТОРИЗАЦИИ ================= */
-        #page-auth {
-            padding-top: 0;
-            display: none;
-            height: 100vh;
-            overflow: hidden;
+        /* Общие секции */
+        .section { padding: 80px 10%; text-align: center; }
+        .section-tag {
+            display: inline-block; background: rgba(255, 0, 0, 0.15); color: var(--accent);
+            padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;
         }
+        .section-title { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
+        .section-desc { color: var(--text-muted); max-width: 600px; margin: 0 auto 60px; font-size: 16px; }
+
+        /* Карточки */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; text-align: left; }
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 40px 30px; border-radius: 16px; transition: all 0.4s ease;
+        }
+        .card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1); }
+        .card h3 { font-size: 24px; margin-bottom: 15px; }
+        .card p { color: var(--text-muted); font-size: 15px; }
+
+        /* Бегущая строка */
+        .marquee-wrapper {
+            background: var(--accent); padding: 15px 0; overflow: hidden; white-space: nowrap;
+            transform: rotate(-2deg); margin: 40px 0; width: 110%; margin-left: -5%; box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+        }
+        .marquee { display: inline-flex; align-items: center; animation: scrollMarquee 20s linear infinite; }
+        .marquee span { font-size: 18px; font-weight: 800; color: #121212; margin: 0 30px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Тарифы */
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: center; }
+        .price-card {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 40px 30px; border-radius: 16px; text-align: center; position: relative; transition: all 0.3s;
+        }
+        .price-card.popular { border-color: var(--accent); transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 0, 0, 0.15); }
+        .pop-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); }
+        .price-old { color: var(--text-muted); text-decoration: line-through; font-size: 16px; }
+        .price-card h3 { font-size: 28px; margin: 10px 0; }
+        .price-sub { color: var(--accent); font-size: 14px; margin-bottom: 20px; font-weight: 600; }
+        .price-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 30px; min-height: 50px; }
+
+        /* FAQ */
+        .faq-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; text-align: left; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; }
+        .faq-question { display: flex; align-items: center; gap: 15px; padding: 24px 30px; font-size: 18px; font-weight: 600; cursor: pointer; transition: color 0.3s; }
+        .faq-icon { display: flex; justify-content: center; align-items: center; min-width: 24px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text-muted); color: var(--text-muted); font-size: 14px; font-weight: 800; transition: all 0.3s; }
+        .faq-toggle-icon { margin-left: auto; transition: transform 0.3s ease; color: var(--text-muted); }
+        .faq-answer { max-height: 0; padding: 0 30px; opacity: 0; color: #d4d4d8; font-size: 15px; line-height: 1.6; transition: all 0.3s ease; }
+        
+        .faq-item.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2); }
+        .faq-item.active .faq-question { color: #fff; }
+        .faq-item.active .faq-icon { border-color: #fff; color: #fff; }
+        .faq-item.active .faq-toggle-icon { transform: rotate(180deg); color: #fff; }
+        .faq-item.active .faq-answer { max-height: 250px; padding-bottom: 24px; opacity: 1; color: #fff; }
+
+        /* ================= АВТОРИЗАЦИЯ ================= */
+        #page-auth { padding-top: 0; display: none; height: 100vh; overflow: hidden; }
         #page-auth.active { display: flex; }
 
         .auth-left {
-            flex: 1;
-            background-image: url('https://i.imgur.com/your-image-url-here.jpg'); /* ТУТ ССЫЛКА НА ФОН */
-            background-size: cover;
-            background-position: center;
-            position: relative;
+            flex: 1; background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg'); /* ТУТ ССЫЛКА НА ФОН */
+            background-size: cover; background-position: center; position: relative;
         }
-        .auth-left::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, rgba(9,9,11,0.8), rgba(9,9,11,1));
-        }
-        .auth-right {
-            flex: 1; display: flex; flex-direction: column; justify-content: center;
-            padding: 0 10%; background: var(--bg); position: relative; z-index: 2;
-        }
+        .auth-left::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(9,9,11,0.8), rgba(9,9,11,1)); }
+        .auth-right { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 10%; background: var(--bg); position: relative; z-index: 2; }
         
         .auth-logo { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
         .auth-back { position: absolute; top: 40px; left: 10%; color: var(--text-muted); cursor: pointer; font-size: 14px; transition: 0.3s; }
@@ -217,9 +252,7 @@
             max-width: 1000px; margin: 0 auto; background: var(--bg-panel);
             border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
         }
-        .profile-tabs {
-            display: flex; border-bottom: 1px solid var(--border); background: var(--bg-card);
-        }
+        .profile-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-card); }
         .p-tab {
             padding: 20px 40px; font-size: 16px; font-weight: 600; color: var(--text-muted);
             cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent;
@@ -227,8 +260,6 @@
         .p-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--bg-panel); }
         
         .profile-content { padding: 40px; }
-        
-        /* Вкладка Настройки */
         .profile-grid { display: grid; grid-template-columns: 200px 1fr; gap: 40px; }
         .avatar-box {
             width: 150px; height: 150px; background: var(--bg-card); border: 2px dashed var(--border);
@@ -244,18 +275,20 @@
         .form-group label { font-size: 14px; color: var(--text-muted); font-weight: 600; }
         
         /* Стиль для заблокированного поля логина */
-        .form-input[readonly] {
-            background-color: #121215;
-            color: #666;
-            cursor: not-allowed;
-            border-color: #27272a;
-        }
+        .form-input[readonly] { background-color: #121215; color: #666; cursor: not-allowed; border-color: #27272a; }
 
         /* Вкладка Скачать клиент */
         .download-tab { text-align: center; }
-        .download-img {
-            width: 100%; max-width: 700px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 30px;
-        }
+        .download-img { width: 100%; max-width: 700px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 30px; }
+
+        /* Подвал */
+        footer { background: #050505; padding: 60px 10% 30px; border-top: 1px solid var(--border); margin-top: 50px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h4 { margin-bottom: 20px; font-size: 18px; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-muted); font-size: 14px; transition: color 0.3s; cursor: pointer; }
+        .footer-col ul li a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--text-muted); font-size: 14px; padding-top: 20px; border-top: 1px solid var(--border); }
 
         /* Адаптив */
         @media (max-width: 900px) {
@@ -295,10 +328,14 @@
             <ul>
                 <li><a onclick="showPage('home')">Главная</a></li>
                 <li><a onclick="showPage('pricing')">Цены</a></li>
-                <li><a onclick="showPage('faq')">Помощь</a></li>
+                <li><a onclick="showPage('faq')">Помощь</a></li> <!-- ВЕРНУЛ FAQ В ПАНЕЛЬ -->
             </ul>
         </nav>
         <div class="header-right">
+            <div class="socials">
+                <a href="https://discord.gg/Ddg8WsCW3J" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"/></svg></a>
+                <a href="https://t.me/k1nostartYT" target="_blank"><svg class="social-icon" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+            </div>
             <button class="btn-outline" id="loginBtn" onclick="showPage('auth')">Вход</button>
             <button class="btn-primary" id="profileBtn" style="display: none;" onclick="showPage('profile')">Аккаунт</button>
         </div>
@@ -308,6 +345,7 @@
     <div id="page-home" class="page active">
         <section class="hero">
             <div class="hero-text animate-up delay-1">
+                <div class="hero-subtitle" style="background: rgba(255,0,0,0.1); color: var(--accent); display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 20px; border: 1px solid rgba(255,0,0,0.3);">Прокачай свой Minecraft!</div>
                 <h1>Твой идеальный <br><span>геймплей</span></h1>
                 <p>HealVisuals — это не просто мод, а полноценный инструмент для комфортной игры. Улучшенный HUD, гибкие настройки и максимум полезных фич без лагов.</p>
                 <div class="hero-btns">
@@ -322,22 +360,86 @@
                 </div>
             </div>
         </section>
+
+        <section class="section">
+            <span class="section-tag">Что мы предлагаем</span>
+            <h2 class="section-title">Всё для комфортной игры</h2>
+            <p class="section-desc">Мы собрали только самые нужные функции, которые не нагружают ПК и делают процесс игры приятнее.</p>
+            <div class="grid-3">
+                <div class="card"><h3>Более 50+ функций</h3><p>Огромный набор модулей на любой вкус: от простых визуальных улучшений до продвинутых утилит.</p></div>
+                <div class="card"><h3>Гибкий интерфейс</h3><p>Настраивай HUD под себя, двигай элементы, меняй цвета и размеры. Всё в твоих руках.</p></div>
+                <div class="card"><h3>Стабильность и FPS</h3><p>Клиент оптимизирован так, чтобы ты не замечал просадок. Высокий FPS даже на слабых сборках.</p></div>
+            </div>
+        </section>
+
+        <div class="marquee-wrapper">
+            <div class="marquee">
+                <span>HealVisuals</span><span>Твой комфорт в игре</span><span>HealVisuals</span><span>Твой комфорт в игре</span><span>HealVisuals</span><span>Твой комфорт в игре</span>
+            </div>
+        </div>
+
+        <section class="section" style="padding-bottom: 20px;">
+            <span class="section-tag">Прайс-лист</span>
+            <h2 class="section-title">Выбери свой доступ</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-old">199 ₽</div><h3>На месяц</h3>
+                    <div class="price-sub">Для теста 🚀</div>
+                    <p class="price-desc">Отличный вариант, чтобы оценить все фичи и понять, что тебе нужно.</p>
+                    <button class="btn-outline" style="width:100%;">Оформить</button>
+                </div>
+                <div class="price-card popular">
+                    <div class="pop-badge">Выбор игроков ⭐</div><div class="price-old">349 ₽</div><h3>На 3 месяца</h3>
+                    <div class="price-sub">Выгода 🔥</div>
+                    <p class="price-desc">Самый популярный вариант среди наших пользователей. Сэкономишь и получишь всё сразу.</p>
+                    <button class="btn-primary" style="width:100%;">Оформить</button>
+                </div>
+                <div class="price-card">
+                    <div class="price-old">799 ₽</div><h3>Навсегда</h3>
+                    <div class="price-sub">Максимальный доступ 💎</div>
+                    <p class="price-desc">Купи один раз и пользуйся без ограничений. Все обновления бесплатно.</p>
+                    <button class="btn-outline" style="width:100%;">Оформить</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <span class="section-tag">FAQ</span>
+            <h2 class="section-title">Частые вопросы</h2>
+            <div class="faq-container">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">i</div> Как происходит активация ключа?
+                        <svg class="faq-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="faq-answer">После оплаты вы получаете ключ в личном кабинете. Его нужно ввести в специальное поле в лаунчере. Доступ активируется моментально.</div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">i</div> Будет ли клиент работать на моей слабой сборке?
+                        <svg class="faq-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="faq-answer">Да, мы провели серьезную оптимизацию. Клиент не только не просаживает FPS, но и может даже немного его повысить.</div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">i</div> Дадут ли бан на серверах за этот клиент?
+                        <svg class="faq-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="faq-answer">Мы не добавляем функции, которые дают нечестное преимущество. Только визуал и удобный интерфейс. Но на некоторых серверах с античитом лучше уточнять правила.</div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- АВТОРИЗАЦИЯ (Сплит-экран) -->
+    <!-- АВТОРИЗАЦИЯ -->
     <div id="page-auth" class="page">
-        <!-- Левая часть с картинкой (замени URL на нужную картинку из твоего 1 скрина) -->
         <div class="auth-left" style="background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg');"></div>
         
-        <!-- Правая часть с формой -->
         <div class="auth-right">
             <div class="auth-back" onclick="showPage('home')">← Назад</div>
-            
             <div class="auth-logo">
-                <svg class="logo-img" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <path fill="#000" d="M4 2h3v1H4zM9 2h3v1H9zM2 3h2v3H2zM5 3h1v1H5zM10 3h1v1h-1zM12 3h2v3h-2zM1 5h1v4H1zM14 5h1v4h-1zM2 8h1v2H2zM13 8h1v2h-1zM3 9h1v2H3zM12 9h1v2h-1zM4 10h1v2H4zM11 10h1v2h-1zM5 11h1v2H5zM10 11h1v2h-1zM6 12h1v2H6zM9 12h1v2H9zM7 13h2v2H7z"/>
-                    <path fill="#ff0000" d="M5 3h2v1H5zM9 3h2v1H9zM4 4h8v2H4zM3 6h10v2H3zM4 8h8v2H4zM5 10h6v1H5zM6 11h4v1H6zM7 12h2v1H7z"/>
-                </svg>
+                <svg class="logo-img" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><path fill="#ff0000" d="M5 3h2v1H5zM9 3h2v1H9zM4 4h8v2H4zM3 6h10v2H3zM4 8h8v2H4zM5 10h6v1H5zM6 11h4v1H6zM7 12h2v1H7z"/></svg>
                 HealVisuals
             </div>
 
@@ -397,7 +499,6 @@
             <!-- Вкладка: Скачать клиент -->
             <div class="profile-content" id="tab-download" style="display: none;">
                 <div class="download-tab">
-                    <!-- Вставь сюда ссылку на свою картинку из 1 скрина -->
                     <img src="https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg" alt="Клиент" class="download-img">
                     <br>
                     <button class="btn-primary" style="padding: 15px 50px; font-size: 18px;">Скачать лаунчер</button>
@@ -416,8 +517,29 @@
     </div>
 
     <!-- ПОДВАЛ -->
-    <footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px;">
-        © 2024 HealVisuals. Все права защищены.
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>HealVisuals</h4>
+                <p style="color: var(--text-muted); font-size: 14px;">Делаем вашу игру лучше каждый день.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Разделы</h4>
+                <ul>
+                    <li><a onclick="showPage('home')">Главная</a></li>
+                    <li><a onclick="showPage('pricing')">Цены</a></li>
+                    <li><a onclick="showPage('faq')">Помощь</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Связь с нами</h4>
+                <ul>
+                    <li><a href="https://t.me/k1nostartYT" target="_blank">Telegram поддержка</a></li>
+                    <li><a href="https://discord.gg/Ddg8WsCW3J" target="_blank">Discord сервер</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">© 2024 HealVisuals. Все права защищены. Мы не связаны с Mojang AB.</div>
     </footer>
 
     <script>
@@ -439,6 +561,17 @@
                 } else {
                     header.style.display = 'flex';
                 }
+            }
+        }
+
+        // --- FAQ ---
+        function toggleFaq(element) {
+            const isActive = element.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (!isActive) {
+                element.classList.add('active');
             }
         }
 
@@ -508,7 +641,6 @@
                         document.getElementById('loginBtn').style.display = 'none';
                         document.getElementById('profileBtn').style.display = 'block';
                         
-                        // Устанавливаем логин в профиле
                         const nickInput = document.getElementById('profileNickname');
                         if(nickInput) nickInput.value = username;
                         
