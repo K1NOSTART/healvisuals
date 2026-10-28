@@ -13,7 +13,7 @@
             --bg-hover: #27272a;
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
-            --accent: #ff0000; /* Красный цвет */
+            --accent: #ff0000;
             --accent-hover: #cc0000;
             --border: #27272a;
         }
@@ -127,6 +127,9 @@
         .btn-primary { background-color: var(--accent); color: #fff; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
         .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
 
+        .btn-danger { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+        .btn-danger:hover { background: rgba(255, 0, 0, 0.1); }
+
         /* ================= СТРАНИЦЫ ================= */
         .page { display: none; min-height: 100vh; padding-top: 100px; animation: fadeIn 0.4s ease-out; }
         .page.active { display: block; }
@@ -215,7 +218,7 @@
         #page-auth.active { display: flex; }
 
         .auth-left {
-            flex: 1; background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg'); /* ТУТ ССЫЛКА НА ФОН */
+            flex: 1; background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg');
             background-size: cover; background-position: center; position: relative;
         }
         .auth-left::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(9,9,11,0.8), rgba(9,9,11,1)); }
@@ -328,7 +331,7 @@
             <ul>
                 <li><a onclick="showPage('home')">Главная</a></li>
                 <li><a onclick="showPage('pricing')">Цены</a></li>
-                <li><a onclick="showPage('faq')">Помощь</a></li> <!-- ВЕРНУЛ FAQ В ПАНЕЛЬ -->
+                <li><a onclick="showPage('faq')">Помощь</a></li>
             </ul>
         </nav>
         <div class="header-right">
@@ -487,11 +490,16 @@
                         <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
                     </div>
                     <div class="settings-form">
-                        <!-- ТУТ ПОЛЕ ЛОГИНА ЗАБЛОКИРОВАНО (readonly) -->
                         <div class="form-group"><label>Ваш логин (изменить нельзя)</label><input type="text" class="form-input" id="profileNickname" value="Загрузка..." readonly></div>
                         <div class="form-group"><label>Привязанная почта</label><input type="email" class="form-input" placeholder="Почта не привязана"></div>
                         <div class="form-group"><label>Смена пароля</label><input type="password" class="form-input" placeholder="Введите новый пароль"></div>
-                        <button class="btn-primary" style="align-self: flex-start; padding: 12px 30px; margin-top: 10px;">Сохранить изменения</button>
+                        
+                        <!-- БЛОК С КНОПКАМИ ВНИЗУ -->
+                        <div style="display: flex; gap: 15px; align-items: center; margin-top: 10px;">
+                            <button class="btn-primary" style="padding: 12px 30px;">Сохранить изменения</button>
+                            <!-- Кнопка выхода -->
+                            <button class="btn-outline btn-danger" onclick="logout()" style="padding: 12px 30px;">Выйти из аккаунта</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -664,7 +672,27 @@
             }
         }
 
-        // Проверка при загрузке
+        // --- ВЫХОД ИЗ АККАУНТА ---
+        function logout() {
+            // Удаляем данные из памяти браузера
+            localStorage.removeItem('heal_token');
+            localStorage.removeItem('heal_user');
+
+            // Возвращаем кнопки в исходное состояние
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('profileBtn').style.display = 'none';
+
+            // Очищаем поля в профиле
+            document.getElementById('profileNickname').value = "";
+            
+            // Перекидываем на главную
+            showPage('home');
+            
+            // Показываем сообщение
+            alert("Вы вышли из аккаунта");
+        }
+
+        // Проверка при загрузке (если пользователь уже заходил)
         window.onload = () => {
             const token = localStorage.getItem('heal_token');
             const user = localStorage.getItem('heal_user');
