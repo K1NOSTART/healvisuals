@@ -16,6 +16,7 @@
             --accent: #ff0000;
             --accent-hover: #cc0000;
             --border: #27272a;
+            --success: #22c55e;
         }
 
         * {
@@ -60,10 +61,58 @@
             0% { transform: rotateX(0deg) rotateY(0deg); }
             100% { transform: rotateX(360deg) rotateY(360deg); }
         }
+        @keyframes floatBadge {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
 
         .animate-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
+
+        /* ================= УВЕДОМЛЕНИЕ (ТОСТ) ================= */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100%);
+            background: #1c1c1e;
+            border: 1px solid var(--success);
+            color: #fff;
+            padding: 16px 30px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(34, 197, 94, 0.2);
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .toast-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: #fff;
+        }
 
         /* ================= ШАПКА ================= */
         header {
@@ -101,7 +150,7 @@
             filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.6));
         }
 
-        nav ul { display: flex; gap: 25px; }
+        nav ul { display: flex; gap: 25px; list-style: none; }
         nav a {
             color: var(--text-muted); font-size: 14px; font-weight: 500;
             transition: color 0.3s; cursor: pointer;
@@ -120,6 +169,8 @@
             font-size: 14px;
             font-weight: 600;
             transition: all 0.3s;
+            cursor: pointer;
+            border: none;
         }
 
         .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
@@ -138,16 +189,32 @@
         .hero {
             display: flex; align-items: center; justify-content: space-between;
             padding: 60px 10%; min-height: calc(100vh - 100px);
+            position: relative;
         }
-        .hero-text { max-width: 600px; }
+        .hero-text { max-width: 600px; z-index: 2; }
         .hero h1 { font-size: 56px; line-height: 1.1; font-weight: 800; margin-bottom: 20px; }
         .hero h1 span { color: var(--accent); }
         .hero p { color: var(--text-muted); font-size: 18px; margin-bottom: 40px; }
         .btn-lg { padding: 14px 32px; font-size: 16px; }
         
         /* 3D Куб */
-        .hero-visual { perspective: 1000px; width: 400px; height: 400px; display: flex; justify-content: center; align-items: center; }
-        .cube { width: 200px; height: 200px; position: relative; transform-style: preserve-3d; animation: spinCube 12s infinite linear; }
+        .hero-visual { 
+            perspective: 1000px; 
+            width: 500px; 
+            height: 500px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            position: relative;
+        }
+        .cube { 
+            width: 200px; 
+            height: 200px; 
+            position: relative; 
+            transform-style: preserve-3d; 
+            animation: spinCube 12s infinite linear; 
+            z-index: 10;
+        }
         .face {
             position: absolute; width: 200px; height: 200px;
             background: rgba(255, 0, 0, 0.2); border: 2px solid var(--accent);
@@ -159,6 +226,26 @@
         .left   { transform: rotateY(-90deg) translateZ(100px); }
         .top    { transform: rotateX(90deg) translateZ(100px); }
         .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        /* Левитирующие надписи */
+        .floating-badge {
+            position: absolute;
+            background: rgba(24, 24, 27, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+
+        .badge-1 { top: 10%; left: 5%; animation: floatBadge 5s ease-in-out infinite; border-color: rgba(255, 0, 0, 0.3); }
+        .badge-2 { top: 40%; right: 0%; animation: floatBadge 6s ease-in-out infinite 0.5s; border-color: rgba(255, 255, 255, 0.2); }
+        .badge-3 { bottom: 10%; left: 15%; animation: floatBadge 4.5s ease-in-out infinite 1s; border-color: rgba(255, 0, 0, 0.2); }
 
         /* Общие секции */
         .section { padding: 80px 10%; text-align: center; }
@@ -213,41 +300,116 @@
         .faq-item.active .faq-toggle-icon { transform: rotate(180deg); color: #fff; }
         .faq-item.active .faq-answer { max-height: 250px; padding-bottom: 24px; opacity: 1; color: #fff; }
 
+        .hidden-faq { display: none; }
+        .show-more-btn {
+            display: block; width: 100%; max-width: 800px; margin: 20px auto 0; padding: 16px;
+            background: transparent; color: var(--text-main); border: 1px solid var(--border);
+            border-radius: 16px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .show-more-btn:hover { background: var(--bg-card); border-color: var(--accent); color: var(--accent); }
+
         /* ================= АВТОРИЗАЦИЯ ================= */
         #page-auth { padding-top: 0; display: none; height: 100vh; overflow: hidden; }
         #page-auth.active { display: flex; }
 
         .auth-left {
-            flex: 1; background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg');
-            background-size: cover; background-position: center; position: relative;
+            flex: 1; 
+            /* ТУТ ТВОЯ ССЫЛКА НА КАРТИНКУ */
+            background-image: url('https://reallyvisuals.me/assets/images/wallpapers/wallpaper-3.png');
+            background-size: cover; 
+            background-position: center; 
+            position: relative;
         }
-        .auth-left::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(9,9,11,0.8), rgba(9,9,11,1)); }
-        .auth-right { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 10%; background: var(--bg); position: relative; z-index: 2; }
         
-        .auth-logo { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
-        .auth-back { position: absolute; top: 40px; left: 10%; color: var(--text-muted); cursor: pointer; font-size: 14px; transition: 0.3s; }
+        .auth-right { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            padding: 0 12%; 
+            background: var(--bg); 
+            position: relative; 
+            z-index: 2; 
+        }
+        
+        .auth-logo { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 80px; }
+        .auth-back { position: absolute; top: 40px; left: 12%; color: var(--text-muted); cursor: pointer; font-size: 14px; transition: 0.3s; text-decoration: none; }
         .auth-back:hover { color: #fff; }
-        .auth-title { font-size: 40px; font-weight: 800; margin-bottom: 10px; }
-        .auth-subtitle { color: var(--text-muted); margin-bottom: 40px; font-size: 15px; }
+        .auth-title { font-size: 42px; font-weight: 800; margin-bottom: 10px; }
+        .auth-subtitle { color: var(--text-muted); margin-bottom: 50px; font-size: 15px; max-width: 400px; }
 
         .auth-form { max-width: 400px; width: 100%; }
         .form-input {
-            width: 100%; padding: 14px 16px; margin-bottom: 20px;
+            width: 100%; padding: 14px 16px; margin-bottom: 25px;
             background: var(--bg-card); border: 1px solid var(--border);
             border-radius: 12px; color: #fff; font-size: 14px; outline: none; transition: 0.3s;
         }
         .form-input:focus { border-color: var(--accent); }
-        .form-label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .form-label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-main); font-weight: 600; }
         
-        .auth-switch { margin-top: 20px; font-size: 14px; color: var(--text-muted); }
-        .auth-switch span { color: var(--accent); cursor: pointer; font-weight: 600; }
-        
-        .btn-auth-submit {
-            width: 100%; padding: 14px; background: var(--accent); color: #fff;
-            font-size: 16px; font-weight: 600; border-radius: 12px; margin-top: 10px;
-            transition: 0.3s; box-shadow: 0 0 20px rgba(255,0,0,0.2);
+        /* Нижняя панель с кнопкой и чекбоксом */
+        .auth-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            margin-top: 10px;
         }
-        .btn-auth-submit:hover { background: var(--accent-hover); }
+
+        .btn-auth-submit {
+            padding: 12px 40px; background: #2a2a2e; color: #fff;
+            font-size: 15px; font-weight: 600; border-radius: 12px;
+            transition: 0.3s; border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer;
+        }
+        .btn-auth-submit:hover { background: #3f3f46; }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .remember-me input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .remember-me input[type="checkbox"]:checked {
+            background: #3f3f46;
+            border-color: #555;
+        }
+        
+        .remember-me input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px; height: 8px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .forgot-pass {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .forgot-pass:hover { color: #fff; }
+
+        .auth-switch { margin-top: 20px; font-size: 14px; color: var(--text-main); font-weight: 600; }
+        .auth-switch span { color: var(--text-muted); cursor: pointer; font-weight: 400; margin-left: 5px; }
+        .auth-switch span:hover { color: #fff; }
 
         /* ================= ЛИЧНЫЙ КАБИНЕТ ================= */
         #page-profile { padding: 120px 10% 60px; }
@@ -277,19 +439,60 @@
         .form-group { display: flex; flex-direction: column; gap: 8px; }
         .form-group label { font-size: 14px; color: var(--text-muted); font-weight: 600; }
         
-        /* Стиль для заблокированного поля логина */
         .form-input[readonly] { background-color: #121215; color: #666; cursor: not-allowed; border-color: #27272a; }
+
+        /* Обертка для инпутов с глазиком */
+        .input-wrapper { position: relative; width: 100%; }
+        .input-wrapper .form-input { margin-bottom: 0; padding-right: 45px; }
+        .eye-icon {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            cursor: pointer; width: 20px; height: 20px; fill: var(--text-muted); transition: 0.3s;
+        }
+        .eye-icon:hover { fill: var(--text-main); }
+
+        /* Сетка для двух полей в ряд */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Блок с заголовком пароля */
+        .password-section-title {
+            display: flex; align-items: center; gap: 10px; margin-top: 20px; margin-bottom: 10px;
+        }
+        .password-section-title h3 { font-size: 20px; font-weight: 700; }
+        .password-section-title p { font-size: 13px; color: var(--text-muted); }
+
+        /* Кнопки снизу */
+        .profile-actions { display: flex; gap: 15px; margin-top: 10px; }
+        .profile-actions .btn-outline { padding: 12px 30px; font-size: 15px; }
+        .profile-actions .btn-primary { padding: 12px 30px; font-size: 15px; }
 
         /* Вкладка Скачать клиент */
         .download-tab { text-align: center; }
         .download-img { width: 100%; max-width: 700px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 30px; }
 
+        /* Блокировка скачивания */
+        .download-blocked {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background: var(--bg-card);
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .download-blocked h3 { font-size: 24px; color: var(--accent); margin-bottom: 10px; }
+        .download-blocked p { color: var(--text-muted); font-size: 16px; margin-bottom: 20px; }
+        .download-blocked .btn-primary { padding: 12px 30px; font-size: 16px; }
+        .download-active { display: flex; flex-direction: column; align-items: center; }
+
         /* Подвал */
         footer { background: #050505; padding: 60px 10% 30px; border-top: 1px solid var(--border); margin-top: 50px; }
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
         .footer-col h4 { margin-bottom: 20px; font-size: 18px; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: var(--text-muted); font-size: 14px; transition: color 0.3s; cursor: pointer; }
+        .footer-col ul li { margin-bottom: 10px; list-style: none; }
+        .footer-col ul li a { color: var(--text-muted); font-size: 14px; transition: color 0.3s; cursor: pointer; text-decoration: none; }
         .footer-col ul li a:hover { color: var(--accent); }
         .copyright { text-align: center; color: var(--text-muted); font-size: 14px; padding-top: 20px; border-top: 1px solid var(--border); }
 
@@ -306,14 +509,32 @@
             .top    { transform: rotateX(90deg) translateZ(75px); }
             .bottom { transform: rotateX(-90deg) translateZ(75px); }
             
+            .badge-1 { top: 0; left: 0; font-size: 12px; padding: 8px 12px; }
+            .badge-2 { top: 40%; right: -20px; font-size: 12px; padding: 8px 12px; }
+            .badge-3 { bottom: 0; left: 10px; font-size: 12px; padding: 8px 12px; }
+
             #page-auth.active { flex-direction: column; overflow-y: auto; }
             .auth-left { display: none; }
-            .auth-right { padding-top: 100px; padding-bottom: 50px; }
+            .auth-right { padding-top: 100px; padding-bottom: 50px; padding-left: 10%; padding-right: 10%; }
             .profile-grid { grid-template-columns: 1fr; }
+            .profile-tabs { flex-direction: column; }
+            .p-tab { padding: 15px 20px; border-bottom: 1px solid var(--border); border-left: 3px solid transparent; }
+            .p-tab.active { border-bottom-color: var(--border); border-left-color: var(--accent); }
+            .form-row { grid-template-columns: 1fr; }
+            .profile-actions { flex-direction: column; }
+            .auth-actions { flex-direction: column; align-items: flex-start; gap: 15px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- УВЕДОМЛЕНИЕ (ТОСТ) -->
+    <div class="toast" id="toast">
+        <div class="toast-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+        <span id="toastText">Настройки успешно сохранены</span>
+    </div>
 
     <!-- ФОН -->
     <div class="bg-grid"></div>
@@ -356,6 +577,10 @@
                 </div>
             </div>
             <div class="hero-visual animate-up delay-2">
+                <div class="floating-badge badge-1">50+ функций</div>
+                <div class="floating-badge badge-2">Косметика</div>
+                <div class="floating-badge badge-3">1.21.11 Fabric</div>
+
                 <div class="cube">
                     <div class="face front"></div><div class="face back"></div>
                     <div class="face right"></div><div class="face left"></div>
@@ -405,8 +630,39 @@
                 </div>
             </div>
         </section>
+    </div>
 
-        <section class="section">
+    <!-- СТРАНИЦА ЦЕН (отдельная) -->
+    <div id="page-pricing" class="page">
+        <section class="section" style="padding-top: 40px;">
+            <span class="section-tag">Прайс-лист</span>
+            <h2 class="section-title">Выбери свой доступ</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-old">199 ₽</div><h3>На месяц</h3>
+                    <div class="price-sub">Для теста 🚀</div>
+                    <p class="price-desc">Отличный вариант, чтобы оценить все фичи и понять, что тебе нужно.</p>
+                    <button class="btn-outline" style="width:100%;">Оформить</button>
+                </div>
+                <div class="price-card popular">
+                    <div class="pop-badge">Выбор игроков ⭐</div><div class="price-old">349 ₽</div><h3>На 3 месяца</h3>
+                    <div class="price-sub">Выгода 🔥</div>
+                    <p class="price-desc">Самый популярный вариант среди наших пользователей. Сэкономишь и получишь всё сразу.</p>
+                    <button class="btn-primary" style="width:100%;">Оформить</button>
+                </div>
+                <div class="price-card">
+                    <div class="price-old">799 ₽</div><h3>Навсегда</h3>
+                    <div class="price-sub">Максимальный доступ 💎</div>
+                    <p class="price-desc">Купи один раз и пользуйся без ограничений. Все обновления бесплатно.</p>
+                    <button class="btn-outline" style="width:100%;">Оформить</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- СТРАНИЦА FAQ (отдельная) -->
+    <div id="page-faq" class="page">
+        <section class="section" style="padding-top: 40px;">
             <span class="section-tag">FAQ</span>
             <h2 class="section-title">Частые вопросы</h2>
             <div class="faq-container">
@@ -431,27 +687,45 @@
                     </div>
                     <div class="faq-answer">Мы не добавляем функции, которые дают нечестное преимущество. Только визуал и удобный интерфейс. Но на некоторых серверах с античитом лучше уточнять правила.</div>
                 </div>
+                
+                <!-- Скрытые вопросы -->
+                <div class="faq-item hidden-faq" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">i</div> Как подключить свой аккаунт?
+                        <svg class="faq-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="faq-answer">Введите данные от сайта в окне авторизации лаунчера. Он автоматически синхронизирует ваш аккаунт и скины через наш сервер.</div>
+                </div>
+                <div class="faq-item hidden-faq" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">i</div> Поддерживает ли клиент последние версии?
+                        <svg class="faq-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="faq-answer">На данный момент основной версией является 1.21.11 Fabric. Мы стараемся оперативно обновлять клиент под новые версии игры.</div>
+                </div>
             </div>
+            
+            <button class="show-more-btn" id="showMoreBtn" onclick="showMoreFaq()">Смотреть ещё</button>
         </section>
     </div>
 
     <!-- АВТОРИЗАЦИЯ -->
     <div id="page-auth" class="page">
-        <div class="auth-left" style="background-image: url('https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg');"></div>
+        <div class="auth-left"></div>
         
         <div class="auth-right">
-            <div class="auth-back" onclick="showPage('home')">← Назад</div>
+            <a class="auth-back" onclick="showPage('home')">Назад</a>
             <div class="auth-logo">
                 <svg class="logo-img" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><path fill="#ff0000" d="M5 3h2v1H5zM9 3h2v1H9zM4 4h8v2H4zM3 6h10v2H3zM4 8h8v2H4zM5 10h6v1H5zM6 11h4v1H6zM7 12h2v1H7z"/></svg>
                 HealVisuals
             </div>
 
-            <h1 class="auth-title" id="authTitle">Создать аккаунт</h1>
-            <p class="auth-subtitle" id="authSubtitle">Создайте аккаунт, чтобы получить доступ к инструментам и настройкам</p>
+            <h1 class="auth-title" id="authTitle">Войти в аккаунт</h1>
+            <p class="auth-subtitle" id="authSubtitle">Продолжите работу с вашими настройками и визуальными инструментами</p>
 
             <form class="auth-form" onsubmit="event.preventDefault(); submitAuth();">
-                <label class="form-label">Введите Логин</label>
-                <input type="text" class="form-input" id="authLogin" placeholder="Ваш никнейм" required>
+                <label class="form-label" id="loginLabel">Введите E-mail</label>
+                <input type="text" class="form-input" id="authLogin" placeholder="example@mail.com" required>
                 
                 <label class="form-label">Введите пароль</label>
                 <input type="password" class="form-input" id="authPass" placeholder="••••••••" required>
@@ -461,11 +735,20 @@
                     <input type="password" class="form-input" id="authPassConfirm" placeholder="••••••••">
                 </div>
 
-                <button type="submit" class="btn-auth-submit" id="submitAuthBtn">Создать аккаунт</button>
+                <!-- Блок кнопок и ссылок -->
+                <div class="auth-actions">
+                    <button type="submit" class="btn-auth-submit" id="submitAuthBtn">Войти</button>
+                    
+                    <label class="remember-me">
+                        <input type="checkbox"> Запомнить меня
+                    </label>
+                    
+                    <a href="#" class="forgot-pass">Забыли пароль?</a>
+                </div>
             </form>
 
-            <div class="auth-switch">
-                <span id="switchText">Уже есть аккаунт? <span onclick="toggleAuthMode()">Войти</span></span>
+            <div class="auth-switch" id="switchText">
+                Нет аккаунта? <span onclick="toggleAuthMode()">Создать</span>
             </div>
         </div>
     </div>
@@ -490,15 +773,52 @@
                         <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
                     </div>
                     <div class="settings-form">
-                        <div class="form-group"><label>Ваш логин (изменить нельзя)</label><input type="text" class="form-input" id="profileNickname" value="Загрузка..." readonly></div>
-                        <div class="form-group"><label>Привязанная почта</label><input type="email" class="form-input" placeholder="Почта не привязана"></div>
-                        <div class="form-group"><label>Смена пароля</label><input type="password" class="form-input" placeholder="Введите новый пароль"></div>
+                        <div class="form-group">
+                            <label>Ваш логин (изменить нельзя)</label>
+                            <input type="text" class="form-input" id="profileNickname" value="Загрузка..." readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Привязанная почта</label>
+                            <input type="email" class="form-input" placeholder="Почта не привязана">
+                        </div>
+
+                        <!-- Блок смены пароля -->
+                        <div class="password-section-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <div>
+                                <h3>Пароль</h3>
+                                <p>При необходимости обновления настроек безопасности</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Текущий пароль</label>
+                            <div class="input-wrapper">
+                                <input type="password" class="form-input" id="currentPass" placeholder="••••••••">
+                                <svg class="eye-icon" onclick="togglePassword('currentPass', this)" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Новый пароль</label>
+                                <div class="input-wrapper">
+                                    <input type="password" class="form-input" id="newPass" placeholder="••••••••">
+                                    <svg class="eye-icon" onclick="togglePassword('newPass', this)" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Продублируйте пароль</label>
+                                <div class="input-wrapper">
+                                    <input type="password" class="form-input" id="confirmNewPass" placeholder="••••••••">
+                                    <svg class="eye-icon" onclick="togglePassword('confirmNewPass', this)" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                </div>
+                            </div>
+                        </div>
                         
-                        <!-- БЛОК С КНОПКАМИ ВНИЗУ -->
-                        <div style="display: flex; gap: 15px; align-items: center; margin-top: 10px;">
-                            <button class="btn-primary" style="padding: 12px 30px;">Сохранить изменения</button>
-                            <!-- Кнопка выхода -->
-                            <button class="btn-outline btn-danger" onclick="logout()" style="padding: 12px 30px;">Выйти из аккаунта</button>
+                        <div class="profile-actions">
+                            <button class="btn-outline" onclick="changePassword()">Сменить пароль</button>
+                            <button class="btn-outline btn-danger" onclick="logout()">Выйти</button>
                         </div>
                     </div>
                 </div>
@@ -507,10 +827,20 @@
             <!-- Вкладка: Скачать клиент -->
             <div class="profile-content" id="tab-download" style="display: none;">
                 <div class="download-tab">
-                    <img src="https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg" alt="Клиент" class="download-img">
-                    <br>
-                    <button class="btn-primary" style="padding: 15px 50px; font-size: 18px;">Скачать лаунчер</button>
-                    <p style="margin-top: 15px; color: var(--text-muted); font-size: 14px;">Версия 1.0.0 | Поддерживает Windows 10/11</p>
+                    <!-- Блокировка: если нет подписки -->
+                    <div id="downloadBlocked" class="download-blocked" style="display: flex;">
+                        <h3>Нет подписок</h3>
+                        <p>У вас нет активной подписки. Приобретите тариф, чтобы получить доступ к скачиванию лаунчера.</p>
+                        <button class="btn-primary" onclick="showPage('pricing')">Выбрать тариф</button>
+                    </div>
+
+                    <!-- Активный блок: если есть подписка (скрыт по умолчанию) -->
+                    <div id="downloadActive" class="download-active" style="display: none;">
+                        <img src="https://sun9-66.userapi.com/impg/X8b9p2jXqG7nK5x2Z3n4L5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1.jpg" alt="Клиент" class="download-img">
+                        <br>
+                        <button class="btn-primary" style="padding: 15px 50px; font-size: 18px;">Скачать лаунчер</button>
+                        <p style="margin-top: 15px; color: var(--text-muted); font-size: 14px;">Версия 1.0.0 | Поддерживает Windows 10/11</p>
+                    </div>
                 </div>
             </div>
 
@@ -554,6 +884,19 @@
         // --- НАСТРОЙКИ API ---
         const API_URL = "https://healapi.lukasuka501.workers.dev";
 
+        // --- УВЕДОМЛЕНИЯ ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
         // --- НАВИГАЦИЯ ---
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => {
@@ -570,6 +913,10 @@
                     header.style.display = 'flex';
                 }
             }
+
+            if (pageId === 'profile') {
+                checkSubscription();
+            }
         }
 
         // --- FAQ ---
@@ -583,8 +930,80 @@
             }
         }
 
+        function showMoreFaq() {
+            const hiddenFaqs = document.querySelectorAll('.hidden-faq');
+            hiddenFaqs.forEach(faq => {
+                faq.style.display = 'block';
+                setTimeout(() => { faq.style.opacity = '1'; }, 50);
+            });
+            document.getElementById('showMoreBtn').style.display = 'none';
+        }
+
+        // --- ГЛАЗИК ДЛЯ ПАРОЛЯ ---
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.style.fill = 'var(--accent)';
+            } else {
+                input.type = 'password';
+                icon.style.fill = 'var(--text-muted)';
+            }
+        }
+
+        // --- СМЕНА ПАРОЛЯ ---
+        async function changePassword() {
+            const currentPass = document.getElementById('currentPass').value.trim();
+            const newPass = document.getElementById('newPass').value.trim();
+            const confirmNewPass = document.getElementById('confirmNewPass').value.trim();
+
+            if (!currentPass || !newPass || !confirmNewPass) {
+                alert("Заполните все поля для смены пароля!");
+                return;
+            }
+
+            if (newPass !== confirmNewPass) {
+                alert("Новые пароли не совпадают!");
+                return;
+            }
+
+            const token = localStorage.getItem('heal_token');
+            if (!token) {
+                alert("Вы не авторизованы!");
+                return;
+            }
+
+            // ЗАГЛУШКА ДЛЯ ТЕСТА (пока нет API для смены пароля)
+            showToast("Пароль успешно изменен!");
+            document.getElementById('currentPass').value = '';
+            document.getElementById('newPass').value = '';
+            document.getElementById('confirmNewPass').value = '';
+        }
+
+        // --- ПРОВЕРКА ПОДПИСКИ ---
+        function checkSubscription() {
+            // ЗАГЛУШКА: подписки нет
+            const hasSubscription = false; 
+
+            if (hasSubscription) {
+                showActiveDownload();
+            } else {
+                showBlockedDownload();
+            }
+        }
+
+        function showBlockedDownload() {
+            document.getElementById('downloadBlocked').style.display = 'flex';
+            document.getElementById('downloadActive').style.display = 'none';
+        }
+
+        function showActiveDownload() {
+            document.getElementById('downloadBlocked').style.display = 'none';
+            document.getElementById('downloadActive').style.display = 'flex';
+        }
+
         // --- АВТОРИЗАЦИЯ ---
-        let isRegisterMode = true;
+        let isRegisterMode = false; // По умолчанию теперь открывается Вход (как на скрине)
 
         function toggleAuthMode() {
             isRegisterMode = !isRegisterMode;
@@ -593,19 +1012,27 @@
             const submitBtn = document.getElementById('submitAuthBtn');
             const switchText = document.getElementById('switchText');
             const confirmPassBlock = document.getElementById('confirmPassBlock');
+            const loginLabel = document.getElementById('loginLabel');
+            const authLogin = document.getElementById('authLogin');
 
             if (isRegisterMode) {
                 authTitle.innerText = 'Создать аккаунт';
                 authSubtitle.innerText = 'Создайте аккаунт, чтобы получить доступ к инструментам и настройкам';
-                submitBtn.innerText = 'Создать аккаунт';
+                submitBtn.innerText = 'Создать';
                 confirmPassBlock.style.display = 'block';
                 switchText.innerHTML = 'Уже есть аккаунт? <span onclick="toggleAuthMode()">Войти</span>';
+                loginLabel.innerText = 'Придумайте Логин';
+                authLogin.placeholder = 'Ваш никнейм';
+                authLogin.type = 'text';
             } else {
                 authTitle.innerText = 'Войти в аккаунт';
                 authSubtitle.innerText = 'Продолжите работу с вашими настройками и визуальными инструментами';
                 submitBtn.innerText = 'Войти';
                 confirmPassBlock.style.display = 'none';
                 switchText.innerHTML = 'Нет аккаунта? <span onclick="toggleAuthMode()">Создать</span>';
+                loginLabel.innerText = 'Введите E-mail';
+                authLogin.placeholder = 'example@mail.com';
+                authLogin.type = 'text';
             }
         }
 
@@ -665,7 +1092,7 @@
                 alert("Сервер не отвечает. Проверьте интернет.");
             } finally {
                 if (isRegisterMode) {
-                    submitBtn.innerText = "Создать аккаунт";
+                    submitBtn.innerText = "Создать";
                 } else {
                     submitBtn.innerText = "Войти";
                 }
@@ -674,25 +1101,16 @@
 
         // --- ВЫХОД ИЗ АККАУНТА ---
         function logout() {
-            // Удаляем данные из памяти браузера
             localStorage.removeItem('heal_token');
             localStorage.removeItem('heal_user');
-
-            // Возвращаем кнопки в исходное состояние
             document.getElementById('loginBtn').style.display = 'block';
             document.getElementById('profileBtn').style.display = 'none';
-
-            // Очищаем поля в профиле
             document.getElementById('profileNickname').value = "";
-            
-            // Перекидываем на главную
             showPage('home');
-            
-            // Показываем сообщение
             alert("Вы вышли из аккаунта");
         }
 
-        // Проверка при загрузке (если пользователь уже заходил)
+        // Проверка при загрузке
         window.onload = () => {
             const token = localStorage.getItem('heal_token');
             const user = localStorage.getItem('heal_user');
@@ -700,7 +1118,6 @@
             if (token && user) {
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('profileBtn').style.display = 'block';
-                
                 const nickInput = document.getElementById('profileNickname');
                 if(nickInput) nickInput.value = user;
             }
@@ -716,6 +1133,10 @@
             document.getElementById('tab-cosmetics').style.display = 'none';
 
             document.getElementById('tab-' + tabName).style.display = 'block';
+
+            if (tabName === 'download') {
+                checkSubscription();
+            }
         }
 
         // --- АВАТАРКА ---
